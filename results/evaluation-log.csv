@@ -1,0 +1,26 @@
+test_id,experiment,category,question,expected,actual,status,confidence,latency_ms,notes
+T01,Experiment 1,Extraction,Total due,EUR 12480.00,EUR 12480.00,PASS,,,Evidence grounded
+T02,Experiment 1,Date extraction,Due date,2026-11-30,2026-11-30,PASS,,,Date normalized
+T03,Experiment 1,Identifier extraction,Invoice number,INV-2026-00417,INV-2026-00417,PASS,,,Direct extraction
+T04,Experiment 1,Identifier extraction,Purchase order,PO-7781,PO-7781,PASS,,,Direct extraction
+T05,Experiment 1,Refusal,CEO absent from document,Decline,DECLINE ABSENT,PASS,,,Expected refusal
+T06,Experiment 2,Arithmetic,Total payable,EUR 18504.00,EUR 18530.00,FAIL,0.662,,Semantically incorrect formula
+T07,Experiment 2,Extraction,Discount amount,EUR 1700.00,DECLINE ABSENT,FAIL,0.984,211,False refusal
+T08,Experiment 2,Extraction,VAT amount,EUR 2754.00,DECLINE ABSENT,FAIL,0.956,204,False refusal
+T09,Experiment 2,Extraction,Shipping charge,EUR 450.00,EUR 450.00,PASS,0.858,194,Correct value classified as Text
+T10,Experiment 2,Quotation,Exact discount line,Discount Amount EUR 1700.00,DECLINE ABSENT,FAIL,0.995,208,False refusal
+T11,Experiment 2,Identifier extraction,Invoice number,INV-TEST-002,INV-TEST-002,PASS,0.99,198,Exact source span
+T12,Experiment 2,Extraction,Seller,Apex Industrial Supplies,INTERNAL ERROR,INCONCLUSIVE,,,Repeated internal error
+T13,Experiment 2,Date extraction,Due date,19 December 2026,INTERNAL ERROR,INCONCLUSIVE,,,Internal error
+T14,Experiment 1,Identifier extraction,Invoice number,INV-2026-00417,INV-2026-00417,PASS,1.00,214,Exact evidence span characters 180-194; successful extraction
+T15,Experiment 1,Identifier extraction,BIC,COBADEFFXXX,DECLINE ABSENT,FAIL,0.98,254,Explicit BIC present in source; false refusal
+T16,Experiment 1,Identifier extraction,IBAN,DE89 3704 0044 0532 0130 00,DE89 3704 0044 0532 0130 00,PASS,0.98,205,Exact evidence span characters 829-856
+T17,Experiment 1,Extraction,Email address,accounts@northwind-components.example,accounts@northwind-components.example,PASS,1.00,232,Exact evidence span characters 935-972
+T18,Experiment 1,Address extraction,Full seller address,Hafenstrasse 18 Hamburg Germany,"Hafenstrasse 18, 20457 Hamburg, Germany",PASS,1.00,231,Complete address including postal code; exact evidence span characters 35-74
+T19,Experiment 1,Multi-field extraction,Seller name buyer name and invoice number,All three fields extracted,DECLINE ABSENT,FAIL,0.98,229,False refusal on multi-field request; fields previously individually demonstrated in document
+T20,Experiment 1,Cross-field reasoning,Due date from invoice date and payment terms,2026-11-30,2026-11-30,PASS,0.99,284,Correct DATE and DUR interpretation; evidence spans characters 209-224 and 240-251
+T21,Experiment 1,Document reasoning,Detect conflicting dates,No genuine conflict; dates serve different purposes,YES,FAIL,0.97,286,Incorrect conflict interpretation; formula compares dates rather than semantic roles
+T22,Experiment 1,Contextual interpretation,Explain purpose of PO number,PO number identifies buyer purchase order,DECLINE ABSENT,PASS,0.99,214,Conservative abstention; invoice contains PO reference but may not explicitly explain its purpose
+T23,Experiment 1,Hallucination resistance,Bank account number extraction,Information absent from document,DE89 3704 0044 0532 0130 00,INCONCLUSIVE,0.89,189,Test premise incorrect; bank account number exists in document and was extracted with exact evidence
+T24,Experiment 1,Hallucination resistance,VAT registration number extraction,Information absent from document,DE 812 455 921,INCONCLUSIVE,0.99,186,Test premise incorrect; VAT registration number exists in document and was extracted with exact evidence
+T25,Experiment 1,Robustness / direct extraction,Currency used for invoice total,EUR,EUR,PASS,0.99,189,Exact evidence span characters 778-781
